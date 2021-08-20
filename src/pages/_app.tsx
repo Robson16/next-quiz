@@ -2,6 +2,8 @@ import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import 'normalize.css';
 
+import { Header } from '../components/Header';
+
 import '../styles/globals.scss';
 
 export default function MyApp({ Component, pageProps }: AppProps) {
@@ -10,7 +12,12 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       <Head>
         <title>Teste Dev Frontend</title>
       </Head>
-      <Component {...pageProps} />
+      <>
+        <Header>
+          <h1>Teste Dev Frontend</h1>
+        </Header>
+        <Component {...pageProps} />
+      </>
     </>
   );
 }
