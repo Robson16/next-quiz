@@ -1,7 +1,6 @@
 import type { GetStaticProps } from 'next';
 import Link from 'next/link';
 
-import { Category } from '../components/Category';
 import { api } from '../services/api';
 
 import styles from '../styles/Home.module.scss';
