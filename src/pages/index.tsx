@@ -16,12 +16,13 @@ interface IHomeProps {
 
 export const getStaticProps: GetStaticProps = async () => {
   const { data } = await api.get('api_category.php');
+  const categories = data.trivia_categories;
 
   return {
     props: {
-      categories: data.trivia_categories,
+      categories
     },
-    revalidate: 60 * 60 * 24,
+    revalidate: 60 * 60 * 24, // 24 hours
   }
 }
 
@@ -30,13 +31,16 @@ export default function Home({ categories }: IHomeProps) {
     <div className={styles.homepage}>
       <div className={styles.container}>
 
-        <h2>Categorias</h2>
+        <h2>Categories</h2>
 
         <div className={styles.categoriesGrid}>
 
           {categories.map((category) => {
             return (
-              <Link href={"/"} key={category.id}>
+              <Link
+                key={category.id}
+                href={`/questions/${category.id}`}
+              >
                 <a className={styles.category}>
                   <span>{category.name}</span>
                 </a>
