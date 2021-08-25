@@ -1,5 +1,7 @@
-import { FormEvent, useState, useEffect, useRef } from 'react';
+import Cookies from 'js-cookie';
+import { FormEvent, useState, useEffect, useRef, useContext } from 'react';
 import { GetStaticPaths, GetStaticProps } from 'next';
+import { useRouter } from 'next/router';
 import { ParsedUrlQuery } from 'querystring';
 import { RiStarSFill } from 'react-icons/ri';
 import { HiCheck, HiX, HiOutlineArrowRight } from "react-icons/hi";
@@ -9,6 +11,7 @@ import { newQuestion } from '../../utils/newQuestion';
 import { QuestionHeader } from '../../components/QuestionHeader';
 
 import styles from './question.module.scss';
+import { ReportContext } from '../../contexts/ReportContext';
 
 interface ICategory {
   id: number;
@@ -72,6 +75,8 @@ export const getStaticProps: GetStaticProps = async (context) => {
 }
 
 export default function Questions({ categoryId, responseCode, questions }: IQuestionsProps) {
+  const { reports, saveReport } = useContext(ReportContext)
+  const router = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
 
   const [question, setQuestion] = useState(questions[0]);
@@ -191,7 +196,14 @@ export default function Questions({ categoryId, responseCode, questions }: IQues
   }
 
   async function handleNextQuestion() {
+    if (questionsCount >= 10) {
+      saveReport({
+        categoryId,
+        score,
+      });
 
+      router.push(`/reports/${categoryId}`);
+    }
 
     const data = await newQuestion({
       categoryId: String(categoryId),
@@ -201,22 +213,16 @@ export default function Questions({ categoryId, responseCode, questions }: IQues
     setQuestion(data.questions[0]);
     setIsQuestionResultModalOpen(false);
     setQuestionsCount(questionsCount + 1);
-
     formRef.current?.reset();
   }
-
-  useEffect(() => {
-    if (questionsCount > 10) {
-      console.log(score);
-    }
-  }, [questionsCount, score]);
 
   return (
     <>
       <div className={styles.questionsContainer}>
-        {responseCode === 1
-          ? <QuestionHeader title="No questions in this category" />
-          : <>
+        {responseCode === 1 ? (
+          <QuestionHeader title="No questions in this category" />
+        ) : (
+          <>
             <QuestionHeader title={question.category} />
             <div className={styles.questionCard} >
               <header>
@@ -261,7 +267,7 @@ export default function Questions({ categoryId, responseCode, questions }: IQues
 
             </div>
           </>
-        }
+        )}
       </div>
 
       {isQuestionResultModalOpen && (

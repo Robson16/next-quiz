@@ -2,6 +2,8 @@ import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import 'normalize.css';
 
+import { ReportProvider } from '../contexts/ReportContext';
+
 import { Header } from '../components/Header';
 
 import '../styles/globals.scss';
@@ -16,7 +18,9 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         <Header>
           <h1>Teste Dev Frontend</h1>
         </Header>
-        <Component {...pageProps} />
+        <ReportProvider>
+          <Component {...pageProps} />
+        </ReportProvider>
       </>
     </>
   );
