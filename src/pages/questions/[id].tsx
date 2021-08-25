@@ -273,12 +273,12 @@ export default function Questions({ categoryId, responseCode, questions }: IQues
       {isQuestionResultModalOpen && (
         <div className={styles.questionResultModal}>
           <div className={styles.questionResultModalOverlay}>
-            <div className={
-              [
-                styles.questionResultModalContainer,
-                (status) ? styles.hit : styles.miss
-              ].join(' ')
-            }>
+            <div
+              className={`
+                ${styles.questionResultModalContainer}
+                ${(status) ? styles.hit : styles.miss}
+              `}
+            >
               {status
                 ? <i><HiCheck size={32} /></i>
                 : <i><HiX size={32} /></i>}
