@@ -6,12 +6,13 @@ import { ParsedUrlQuery } from 'querystring';
 import { RiStarSFill } from 'react-icons/ri';
 import { HiCheck, HiX, HiOutlineArrowRight } from "react-icons/hi";
 
+import { ReportContext } from '../../contexts/ReportContext';
+
 import { api } from '../../services/api';
 import { newQuestion } from '../../utils/newQuestion';
 import { QuestionHeader } from '../../components/QuestionHeader';
 
 import styles from './question.module.scss';
-import { ReportContext } from '../../contexts/ReportContext';
 
 interface ICategory {
   id: number;
@@ -26,6 +27,26 @@ interface IQuestion {
   questionText: string;
   correctAnswer: string;
   alternatives: string[];
+}
+
+interface ISequences {
+  hit: number;
+  miss: number;
+}
+
+interface IScore {
+  easy: {
+    hit: number;
+    miss: number;
+  },
+  medium: {
+    hit: number;
+    miss: number;
+  },
+  hard: {
+    hit: number;
+    miss: number;
+  }
 }
 
 interface IQuestionsProps {
@@ -75,34 +96,19 @@ export const getStaticProps: GetStaticProps = async (context) => {
 }
 
 export default function Questions({ categoryId, responseCode, questions }: IQuestionsProps) {
-  const { reports, saveReport } = useContext(ReportContext)
+  const { reports, saveReport } = useContext(ReportContext);
+
   const router = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
 
   const [question, setQuestion] = useState(questions[0]);
   const [answer, setAnswer] = useState("");
+  const [isAnswerCorrect, setIsAnswerCorrect] = useState<Boolean | undefined>(undefined);
   const [questionsCount, setQuestionsCount] = useState(1);
   const [currentDifficulty, setCurrentDifficulty] = useState(question.difficultyName);
-  const [isQuestionResultModalOpen, setIsQuestionResultModalOpen] = useState(false);
-  const [status, setStatus] = useState(Boolean);
-  const [sequences, setSequences] = useState({
-    hit: 0,
-    miss: 0,
-  });
-  const [score, setScore] = useState({
-    easy: {
-      hit: 0,
-      miss: 0,
-    },
-    medium: {
-      hit: 0,
-      miss: 0,
-    },
-    hard: {
-      hit: 0,
-      miss: 0,
-    }
-  });
+  const [isQuestionsResultModalOpen, setIsQuestionsResultModalOpen] = useState(false);
+  const [sequences, setSequences] = useState<ISequences>({ hit: 0, miss: 0 });
+  const [score, setScore] = useState<IScore>({ easy: { hit: 0, miss: 0 }, medium: { hit: 0, miss: 0 }, hard: { hit: 0, miss: 0 } });
 
   function handleSubmit(event: FormEvent) {
     event.preventDefault();
@@ -110,15 +116,15 @@ export default function Questions({ categoryId, responseCode, questions }: IQues
     let newScore = score;
     switch (question.difficultyName) {
       case 'easy':
-        (status) ? newScore.easy.hit++ : newScore.easy.miss++;
+        (isAnswerCorrect) ? newScore.easy.hit++ : newScore.easy.miss++;
         break;
 
       case 'medium':
-        (status) ? newScore.medium.hit++ : newScore.medium.miss++;
+        (isAnswerCorrect) ? newScore.medium.hit++ : newScore.medium.miss++;
         break;
 
       case 'hard':
-        (status) ? newScore.hard.hit++ : newScore.hard.miss++;
+        (isAnswerCorrect) ? newScore.hard.hit++ : newScore.hard.miss++;
         break;
 
       default:
@@ -127,7 +133,7 @@ export default function Questions({ categoryId, responseCode, questions }: IQues
     setScore(newScore);
 
     let newSequences = sequences;
-    if (status) {
+    if (isAnswerCorrect) {
       newSequences.miss = 0;
       if (newSequences.hit < 2) newSequences.hit++;
     } else {
@@ -182,16 +188,16 @@ export default function Questions({ categoryId, responseCode, questions }: IQues
       }
     }
 
-    setIsQuestionResultModalOpen(true);
+    setIsQuestionsResultModalOpen(true);
   }
 
   function handleAnswerToggle(answer: string) {
     setAnswer(answer);
 
     if (answer === question.correctAnswer) {
-      setStatus(true);
+      setIsAnswerCorrect(true);
     } else {
-      setStatus(false);
+      setIsAnswerCorrect(false);
     }
   }
 
@@ -201,8 +207,6 @@ export default function Questions({ categoryId, responseCode, questions }: IQues
         categoryId,
         score,
       });
-
-      router.push(`/reports/${categoryId}`);
     }
 
     const data = await newQuestion({
@@ -211,7 +215,7 @@ export default function Questions({ categoryId, responseCode, questions }: IQues
     });
 
     setQuestion(data.questions[0]);
-    setIsQuestionResultModalOpen(false);
+    setIsQuestionsResultModalOpen(false);
     setQuestionsCount(questionsCount + 1);
     formRef.current?.reset();
   }
@@ -270,20 +274,20 @@ export default function Questions({ categoryId, responseCode, questions }: IQues
         )}
       </div>
 
-      {isQuestionResultModalOpen && (
+      {isQuestionsResultModalOpen && (
         <div className={styles.questionResultModal}>
           <div className={styles.questionResultModalOverlay}>
             <div
               className={`
                 ${styles.questionResultModalContainer}
-                ${(status) ? styles.hit : styles.miss}
+                ${(isAnswerCorrect) ? styles.hit : styles.miss}
               `}
             >
-              {status
+              {isAnswerCorrect
                 ? <i><HiCheck size={32} /></i>
                 : <i><HiX size={32} /></i>}
               <p>
-                {status ? "You're right!" : "You missed!"}
+                {isAnswerCorrect ? "You're right!" : "You missed!"}
               </p>
               <button type="button" onClick={handleNextQuestion}>
                 <span>Advance</span>
