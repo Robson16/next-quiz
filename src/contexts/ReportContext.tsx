@@ -22,7 +22,7 @@ interface IReport {
 
 interface ReportContextData {
   reports: IReport[];
-  saveReport: (score: IReport) => void;
+  saveReport: (report: IReport) => void;
 }
 
 interface ReportProviderProps {
