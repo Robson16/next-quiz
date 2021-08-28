@@ -1,4 +1,5 @@
 import { api } from '../services/api';
+import Shuffle from './shuffle';
 
 interface IQuestionAPI {
   category: string;
@@ -20,7 +21,7 @@ interface IQuestion {
 }
 
 interface INewQuestionData {
-  categoryId: string;
+  categoryId: number;
   categoryDifficulty: string;
 }
 
@@ -49,7 +50,7 @@ export const newQuestion = async ({ categoryId, categoryDifficulty }: INewQuesti
       difficultyNumber: difficultyNames.indexOf(question.difficulty, 0) + 1,
       questionText: question.question,
       correctAnswer: question.correct_answer,
-      alternatives: [...question.incorrect_answers, question.correct_answer],
+      alternatives: Shuffle([...question.incorrect_answers, question.correct_answer]),
     };
   });
 
