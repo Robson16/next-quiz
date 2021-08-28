@@ -1,5 +1,9 @@
+import { useContext } from 'react';
 import type { GetStaticProps } from 'next';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
+
+import { ReportContext } from '../contexts/ReportContext';
 
 import { api } from '../services/api';
 
@@ -27,6 +31,19 @@ export const getStaticProps: GetStaticProps = async () => {
 }
 
 export default function Home({ categories }: IHomeProps) {
+  const router = useRouter();
+  const { reports } = useContext(ReportContext);
+
+  function handleSelectCategory(categoryId: number) {
+    const categoryAlreadyHasReport = reports.find(report => report.categoryId === categoryId);
+
+    if (categoryAlreadyHasReport) {
+      router.push(`/reports/${categoryId}`);
+    } else {
+      router.push(`/questions/${categoryId}`);
+    }
+  }
+
   return (
     <div className={styles.homepage}>
       <div className={styles.container}>
@@ -37,14 +54,13 @@ export default function Home({ categories }: IHomeProps) {
 
           {categories.map((category) => {
             return (
-              <Link
+              <a
                 key={category.id}
-                href={`/questions/${category.id}`}
+                className={styles.category}
+                onClick={() => handleSelectCategory(category.id)}
               >
-                <a className={styles.category}>
-                  <span>{category.name}</span>
-                </a>
-              </Link>
+                <span>{category.name}</span>
+              </a>
             );
           })}
 
