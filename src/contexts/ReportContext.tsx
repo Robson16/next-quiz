@@ -1,3 +1,4 @@
+import Cookies from "js-cookie";
 import { createContext, ReactNode, useEffect, useState } from "react";
 
 interface IScore {
@@ -32,15 +33,16 @@ interface ReportProviderProps {
 export const ReportContext = createContext({} as ReportContextData);
 
 export function ReportProvider({ children }: ReportProviderProps) {
-  const [reports, setReports] = useState<IReport[]>([]);
+  const [reports, setReports] = useState<IReport[]>(() => {
+    const reportsFromCookies = Cookies.get('reports');
+    return (reportsFromCookies) ? JSON.parse(reportsFromCookies) : [];
+  });
 
-  async function saveReport(report: IReport) {
+  function saveReport(report: IReport) {
+    const reportsString = JSON.stringify([...reports, report]);
+    Cookies.set('reports', reportsString);
     setReports([...reports, report]);
   }
-
-  useEffect(() => {
-    console.log(reports);
-  }, [reports]);
 
   return (
     <ReportContext.Provider
