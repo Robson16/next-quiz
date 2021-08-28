@@ -1,6 +1,9 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react'
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import Image from 'next/image';
+import Head from 'next/head';
+
 import { ReportContext } from '../../contexts/ReportContext';
 
 import styles from './report.module.scss';
@@ -31,39 +34,82 @@ export default function Reports() {
 
   const categoryId = Number(router.query.categoryId);
 
-  const [report, setReport] = useState<IReport | undefined>(() => {
-    return reports.find((element) => { element.categoryId === categoryId });
-  });
+
+
+  const [report, setReport] = useState<IReport | undefined>(undefined);
+
+  useEffect(() => {
+    setReport(() => {
+      return reports.find(r => r.categoryId === categoryId);
+    });
+  }, [categoryId, reports]);
 
   return (
-    <>
-      <h1>Report</h1>
-      <Link href="/">
-        <a>
-          Close
-        </a>
-      </Link>
-      {report ? (
-        <>
+    <div className={styles.reportContainer}>
+      <Head>
+        <title>Results | Teste Dev Frontend</title>
+      </Head>
+      <div className={styles.reportCard}>
+        <header>
           <div>
-            <h2>Easy</h2>
-            <span>Hits: {report.score.easy.hit}</span>
-            <span>Miss: {report.score.easy.miss}</span>
+            <Image
+              src="/mascot.svg"
+              width={105}
+              height={115}
+              alt="Mascot"
+              objectFit="contain"
+            />
+            <div>
+              <p>Congratulations!</p>
+              <p>You finished the test</p>
+            </div>
           </div>
-          <div>
-            <h2>Medium</h2>
-            <span>Hits: {report.score.medium.hit}</span>
-            <span>Miss: {report.score.medium.miss}</span>
+          <span>See your performance on the questions</span>
+        </header>
+        {report ? (
+          <div className={styles.resultValues}>
+            <div className={styles.total}>
+              <span>
+                {report.score.easy.hit + report.score.medium.hit + report.score.hard.hit}
+                <small>Hits</small>
+              </span>
+              <span>
+                {report.score.easy.miss + report.score.medium.miss + report.score.hard.miss}
+                <small>Miss</small>
+              </span>
+            </div>
+            <div className={styles.difficulties}>
+              <div>
+                <ul>
+                  <li>Easy</li>
+                  <li>Hits: {report.score.easy.hit}</li>
+                  <li>Miss: {report.score.easy.miss}</li>
+                </ul>
+              </div>
+              <div>
+                <ul>
+                  <li>Medium</li>
+                  <li>Hits: {report.score.medium.hit}</li>
+                  <li>Miss: {report.score.medium.miss}</li>
+                </ul>
+              </div>
+              <div>
+                <ul>
+                  <li>Hard</li>
+                  <li>Hits: {report.score.hard.hit}</li>
+                  <li>Miss: {report.score.hard.miss}</li>
+                </ul>
+              </div>
+            </div>
           </div>
-          <div>
-            <h2>Hard</h2>
-            <span>Hits: {report.score.hard.hit}</span>
-            <span>Miss: {report.score.hard.miss}</span>
-          </div>
-        </>
-      ) : (
-        <h2>Ué?! Cade?</h2>
-      )}
-    </>
+        ) : (
+          <p>Nada!</p>
+        )}
+
+        <Link href="/" passHref>
+          <button type="button">Back to start</button>
+        </Link>
+      </div>
+    </div >
   );
 }
