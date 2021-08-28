@@ -1,4 +1,3 @@
-import Cookies from 'js-cookie';
 import { FormEvent, useState, useEffect, useRef, useContext } from 'react';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
@@ -81,13 +80,13 @@ export const getStaticProps: GetStaticProps = async (context) => {
   const { id } = context.params as IParams;
 
   const data = await newQuestion({
-    categoryId: id,
+    categoryId: Number(id),
     categoryDifficulty: 'medium'
   });
 
   return {
     props: {
-      categoryId: id,
+      categoryId: Number(id),
       responseCode: data.responseCode,
       questions: data.questions,
     },
@@ -96,7 +95,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 }
 
 export default function Questions({ categoryId, responseCode, questions }: IQuestionsProps) {
-  const { reports, saveReport } = useContext(ReportContext);
+  const { saveReport } = useContext(ReportContext);
 
   const router = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
@@ -207,18 +206,28 @@ export default function Questions({ categoryId, responseCode, questions }: IQues
         categoryId,
         score,
       });
+
+      router.push(`/reports/${categoryId}`);
     }
 
     const data = await newQuestion({
-      categoryId: String(categoryId),
+      categoryId,
       categoryDifficulty: currentDifficulty,
     });
 
     setQuestion(data.questions[0]);
     setIsQuestionsResultModalOpen(false);
     setQuestionsCount(questionsCount + 1);
-    formRef.current?.reset();
+    setAnswer("");
   }
+
+  useEffect(() => {
+    if (!formRef.current) {
+      return;
+    }
+
+    formRef.current.reset();
+  }, [question]);
 
   return (
     <>
