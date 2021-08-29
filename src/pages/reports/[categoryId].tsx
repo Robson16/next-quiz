@@ -103,7 +103,9 @@ export default function Reports() {
             </div>
           </div>
         ) : (
-          <p>Nada!</p>
+          <div className={styles.resultValues}>
+            <p>Not found</p>
+          </div>
         )}
 
         <Link href="/" passHref>
