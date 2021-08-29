@@ -1,7 +1,6 @@
 import { useContext } from 'react';
 import type { GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
-import Link from 'next/link';
 
 import { ReportContext } from '../contexts/ReportContext';
 
@@ -24,18 +23,20 @@ export const getStaticProps: GetStaticProps = async () => {
 
   return {
     props: {
-      categories
+      categories,
     },
     revalidate: 60 * 60 * 24, // 24 hours
-  }
-}
+  };
+};
 
 export default function Home({ categories }: IHomeProps) {
   const router = useRouter();
   const { reports } = useContext(ReportContext);
 
   function handleSelectCategory(categoryId: number) {
-    const categoryAlreadyHasReport = reports.find(report => report.categoryId === categoryId);
+    const categoryAlreadyHasReport = reports.find(
+      (report) => report.categoryId === categoryId,
+    );
 
     if (categoryAlreadyHasReport) {
       router.push(`/reports/${categoryId}`);
@@ -47,27 +48,20 @@ export default function Home({ categories }: IHomeProps) {
   return (
     <div className={styles.homepage}>
       <div className={styles.container}>
-
         <h2>Categories</h2>
 
         <div className={styles.categoriesGrid}>
-
-          {categories.map((category) => {
-            return (
-              <a
-                key={category.id}
-                className={styles.category}
-                onClick={() => handleSelectCategory(category.id)}
-              >
-                <span>{category.name}</span>
-              </a>
-            );
-          })}
-
+          {categories.map((category) => (
+            <a
+              key={category.id}
+              className={styles.category}
+              onClick={() => handleSelectCategory(category.id)}
+            >
+              <span>{category.name}</span>
+            </a>
+          ))}
         </div>
-
       </div>
-
     </div>
   );
 }

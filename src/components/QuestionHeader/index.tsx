@@ -11,7 +11,7 @@ export function QuestionHeader({ title }: IQuestionHeaderProps) {
   return (
     <header className={styles.questionHeader}>
       <h2>{title}</h2>
-      <Link href="/">
+      <Link href='/'>
         <a>
           <RiCloseCircleLine size={18} />
           Close

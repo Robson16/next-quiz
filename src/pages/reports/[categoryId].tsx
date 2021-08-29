@@ -34,8 +34,6 @@ export default function Reports() {
 
   const categoryId = Number(router.query.categoryId);
 
-
-
   const [report, setReport] = useState<IReport | undefined>(undefined);
 
   useEffect(() => {
@@ -53,11 +51,11 @@ export default function Reports() {
         <header>
           <div>
             <Image
-              src="/mascot.svg"
+              src='/mascot.svg'
               width={105}
               height={115}
-              alt="Mascot"
-              objectFit="contain"
+              alt='Mascot'
+              objectFit='contain'
             />
             <div>
               <p>Congratulations!</p>
@@ -108,8 +106,8 @@ export default function Reports() {
           </div>
         )}
 
-        <Link href="/" passHref>
-          <button type="button">Back to start</button>
+        <Link href='/' passHref>
+          <button type='button'>Back to start</button>
         </Link>
       </div>
     </div >

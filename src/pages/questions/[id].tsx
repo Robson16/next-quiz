@@ -3,7 +3,7 @@ import { GetStaticPaths, GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import { ParsedUrlQuery } from 'querystring';
 import { RiStarSFill } from 'react-icons/ri';
-import { HiCheck, HiX, HiOutlineArrowRight } from "react-icons/hi";
+import { HiCheck, HiX, HiOutlineArrowRight } from 'react-icons/hi';
 
 import { ReportContext } from '../../contexts/ReportContext';
 
@@ -101,7 +101,7 @@ export default function Questions({ categoryId, responseCode, questions }: IQues
   const formRef = useRef<HTMLFormElement>(null);
 
   const [question, setQuestion] = useState(questions[0]);
-  const [answer, setAnswer] = useState("");
+  const [answer, setAnswer] = useState('');
   const [isAnswerCorrect, setIsAnswerCorrect] = useState<Boolean | undefined>(undefined);
   const [questionsCount, setQuestionsCount] = useState(1);
   const [currentDifficulty, setCurrentDifficulty] = useState(question.difficultyName);
@@ -218,7 +218,7 @@ export default function Questions({ categoryId, responseCode, questions }: IQues
     setQuestion(data.questions[0]);
     setIsQuestionsResultModalOpen(false);
     setQuestionsCount(questionsCount + 1);
-    setAnswer("");
+    setAnswer('');
   }
 
   useEffect(() => {
@@ -233,7 +233,7 @@ export default function Questions({ categoryId, responseCode, questions }: IQues
     <>
       <div className={styles.questionsContainer}>
         {responseCode === 1 ? (
-          <QuestionHeader title="No questions in this category" />
+          <QuestionHeader title='No questions in this category' />
         ) : (
           <>
             <QuestionHeader title={question.category} />
@@ -257,8 +257,8 @@ export default function Questions({ categoryId, responseCode, questions }: IQues
                   return (
                     <div key={index}>
                       <input
-                        type="radio"
-                        name="alternative"
+                        type='radio'
+                        name='alternative'
                         id={`alternative-${index}`}
                         onClick={() => handleAnswerToggle(alternative)}
                       />
@@ -271,7 +271,7 @@ export default function Questions({ categoryId, responseCode, questions }: IQues
                 })}
 
                 <button
-                  type="submit"
+                  type='submit'
                   disabled={!answer.length}
                 >
                   Reply
@@ -296,9 +296,9 @@ export default function Questions({ categoryId, responseCode, questions }: IQues
                 ? <i><HiCheck size={32} /></i>
                 : <i><HiX size={32} /></i>}
               <p>
-                {isAnswerCorrect ? "You're right!" : "You missed!"}
+                {isAnswerCorrect ? 'You\'re right!' : 'You missed!'}
               </p>
-              <button type="button" onClick={handleNextQuestion}>
+              <button type='button' onClick={handleNextQuestion}>
                 <span>Advance</span>
                 <HiOutlineArrowRight size={24} />
               </button>
