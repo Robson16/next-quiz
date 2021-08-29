@@ -1,2 +1,41 @@
-# Teste-Tecnico-Dev-Frontend-Robson-Henrique-Rodrigues
-Teste Técnico - Dev Frontend - Robson Henrique Rodrigues
+<h1 align="center">
+  Technical Test - Dev Frontend - Robson Henrique Rodrigues
+</h1>
+
+Quiz App created as a test for a FrontEnd Developer position at SAS Educação
+
+- [Production App](https://teste-tecnico-dev-frontend-robson-henrique-rodrigues.vercel.app/)
+
+## 🛠 Technologies
+This project was developed with the following technologies
+
+- [Next.js](https://nextjs.org/)
+- [React.js](https://pt-br.reactjs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [SASS](https://sass-lang.com/)
+
+## :closed_book: Getting Started
+
+You need to have [Node.js](https://nodejs.org/) installed, then you can clone and run this project on your computer with the commands:
+
+```bash
+# Clone this repository
+$ git clone https://github.com/Robson16/teste-tecnico-dev-frontend-robson-henrique-rodrigues.git
+
+# Go to project folder
+$ cd teste-tecnico-dev-frontend-robson-henrique-rodrigues
+
+# install dependencies
+$ npm install
+# or
+$ yarn
+
+# Execute a aplicação em modo de desenvolvimento
+$ npm dev
+# or
+$ yarn dev
+```
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+
+
