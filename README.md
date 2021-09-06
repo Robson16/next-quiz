@@ -1,10 +1,10 @@
 <h1 align="center">
-  Technical Test - Dev Frontend - Robson Henrique Rodrigues
+  Next Quiz
 </h1>
 
-Quiz App created as a test for a FrontEnd Developer position at SAS Educação
+Quiz App created with ReactJS and NextJS
 
-- [Production App](https://teste-tecnico-dev-frontend-robson-henrique-rodrigues.vercel.app/)
+- [Production App](https://my-next-quiz.vercel.app/)
 
 ## 🛠 Technologies
 This project was developed with the following technologies

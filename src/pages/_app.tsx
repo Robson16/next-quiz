@@ -12,11 +12,11 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
-        <title>Teste Dev Frontend</title>
+        <title>Next Quiz</title>
       </Head>
       <>
         <Header>
-          <h1>Teste Dev Frontend</h1>
+          <h1>Next Quiz</h1>
         </Header>
         <ReportProvider>
           <Component {...pageProps} />

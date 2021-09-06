@@ -5,10 +5,10 @@ export default class MyDocument extends Document {
     return (
       <Html lang='en'>
         <Head>
-          <link rel="manifest" href="/manifest.json" />
-          <link rel="apple-touch-icon" href="/icon.png"></link>
-          <meta name="theme-color" content="#fff" />
-          <meta name='description' content='Small system created as a test for a FrontEnd Developer position at SAS Educação' />
+          <link rel='manifest' href='/manifest.json' />
+          <link rel='apple-touch-icon' href='/icon.png'></link>
+          <meta name='theme-color' content='#fff' />
+          <meta name='description' content='Quiz App created with ReactJS and NextJS' />
 
           <link rel='preconnect' href='https://fonts.googleapis.com' />
           <link rel='preconnect' href='https://fonts.gstatic.com' />
