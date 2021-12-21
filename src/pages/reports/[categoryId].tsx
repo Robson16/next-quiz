@@ -8,24 +8,20 @@ import { ReportContext } from '../../contexts/ReportContext';
 
 import styles from './report.module.scss';
 
-interface IScore {
-  easy: {
-    hit: number;
-    miss: number;
-  };
-  medium: {
-    hit: number;
-    miss: number;
-  };
-  hard: {
-    hit: number;
-    miss: number;
-  };
+interface IPoint {
+  hit: number,
+  miss: number,
+}
+
+interface IDifficultyPoints {
+  easy: IPoint,
+  medium: IPoint,
+  hard: IPoint,
 }
 
 interface IReport {
   categoryId: number;
-  score: IScore;
+  points: IDifficultyPoints;
 }
 
 export default function Reports() {
@@ -45,7 +41,7 @@ export default function Reports() {
   return (
     <div className={styles.reportContainer}>
       <Head>
-        <title>Results | Teste Dev Frontend</title>
+        <title>Results | Next Quiz</title>
       </Head>
       <div className={styles.reportCard}>
         <header>
@@ -68,11 +64,11 @@ export default function Reports() {
           <div className={styles.resultValues}>
             <div className={styles.total}>
               <span>
-                {report.score.easy.hit + report.score.medium.hit + report.score.hard.hit}
+                {report.points.easy.hit + report.points.medium.hit + report.points.hard.hit}
                 <small>Hits</small>
               </span>
               <span>
-                {report.score.easy.miss + report.score.medium.miss + report.score.hard.miss}
+                {report.points.easy.miss + report.points.medium.miss + report.points.hard.miss}
                 <small>Miss</small>
               </span>
             </div>
@@ -80,22 +76,22 @@ export default function Reports() {
               <div>
                 <ul>
                   <li>Easy</li>
-                  <li>Hits: {report.score.easy.hit}</li>
-                  <li>Miss: {report.score.easy.miss}</li>
+                  <li>Hits: {report.points.easy.hit}</li>
+                  <li>Miss: {report.points.easy.miss}</li>
                 </ul>
               </div>
               <div>
                 <ul>
                   <li>Medium</li>
-                  <li>Hits: {report.score.medium.hit}</li>
-                  <li>Miss: {report.score.medium.miss}</li>
+                  <li>Hits: {report.points.medium.hit}</li>
+                  <li>Miss: {report.points.medium.miss}</li>
                 </ul>
               </div>
               <div>
                 <ul>
                   <li>Hard</li>
-                  <li>Hits: {report.score.hard.hit}</li>
-                  <li>Miss: {report.score.hard.miss}</li>
+                  <li>Hits: {report.points.hard.hit}</li>
+                  <li>Miss: {report.points.hard.miss}</li>
                 </ul>
               </div>
             </div>

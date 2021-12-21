@@ -1,4 +1,4 @@
-import { FormEvent, useState, useEffect, useRef, useContext } from 'react';
+import { FormEvent, useState, useEffect, useRef, useContext, useReducer } from 'react';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import { ParsedUrlQuery } from 'querystring';
@@ -28,24 +28,26 @@ interface IQuestion {
   alternatives: string[];
 }
 
-interface ISequences {
-  hit: number;
-  miss: number;
+interface IPoint {
+  hit: number,
+  miss: number,
 }
 
-interface IScore {
-  easy: {
-    hit: number;
-    miss: number;
-  },
-  medium: {
-    hit: number;
-    miss: number;
-  },
-  hard: {
-    hit: number;
-    miss: number;
-  }
+interface IDifficultyPoints {
+  easy: IPoint,
+  medium: IPoint,
+  hard: IPoint,
+}
+
+interface IState {
+  count: number,
+  currentDifficulty: string,
+  sequences: IPoint,
+  points: IDifficultyPoints,
+}
+
+interface IAction {
+  type: 'hit' | 'miss' | 'count'
 }
 
 interface IQuestionsProps {
@@ -57,6 +59,110 @@ interface IQuestionsProps {
 interface IParams extends ParsedUrlQuery {
   id: string
 }
+
+const initialState = {
+  points: {
+    easy: {
+      hit: 0,
+      miss: 0
+    },
+    medium: {
+      hit: 0,
+      miss: 0
+    },
+    hard: {
+      hit: 0,
+      miss: 0
+    },
+  },
+  sequences: {
+    hit: 0,
+    miss: 0
+  },
+  count: 1,
+  currentDifficulty: 'medium',
+};
+
+const reducer = (state: IState, action: IAction): IState => {
+  const { count, points, currentDifficulty, sequences } = state;
+
+  let newPoints: IDifficultyPoints = {} as IDifficultyPoints;
+  let newSequences: IPoint = {} as IPoint;
+  let newDifficulty = currentDifficulty;
+
+  switch (action.type) {
+    case 'hit':
+      if (currentDifficulty === 'easy') {
+        newPoints = { ...points, easy: { ...points.easy, hit: points.easy.hit + 1 } }
+      }
+      if (currentDifficulty === 'medium') {
+        newPoints = { ...points, medium: { ...points.medium, hit: points.medium.hit + 1 } }
+      }
+      if (currentDifficulty === 'hard') {
+        newPoints = { ...points, hard: { ...points.hard, hit: points.hard.hit + 1 } }
+      }
+
+      newSequences = { ...sequences, hit: sequences.hit + 1, miss: 0 };
+
+      if (newSequences.hit >= 2) {
+        if (currentDifficulty === "easy") {
+          newSequences = { ...sequences, hit: 0, miss: 0 };
+          newDifficulty = "medium";
+        }
+        if (currentDifficulty === "medium") {
+          newSequences = { ...sequences, hit: 0, miss: 0 };
+          newDifficulty = "hard";
+        }
+      }
+
+      return {
+        ...state,
+        points: newPoints,
+        sequences: newSequences,
+        currentDifficulty: newDifficulty,
+      };
+
+    case 'miss':
+      if (currentDifficulty === 'easy') {
+        newPoints = { ...points, easy: { ...points.easy, miss: points.easy.miss + 1 } }
+      }
+      if (currentDifficulty === 'medium') {
+        newPoints = { ...points, medium: { ...points.medium, miss: points.medium.miss + 1 } }
+      }
+      if (currentDifficulty === 'hard') {
+        newPoints = { ...points, hard: { ...points.hard, miss: points.hard.miss + 1 } }
+      }
+
+      newSequences = { ...sequences, miss: sequences.miss + 1, hit: 0 };
+
+      if (newSequences.miss >= 2) {
+        if (currentDifficulty === "hard") {
+          newSequences = { ...sequences, hit: 0, miss: 0 };
+          newDifficulty = "medium";
+        }
+        if (currentDifficulty === "medium") {
+          newSequences = { ...sequences, hit: 0, miss: 0 };
+          newDifficulty = "easy";
+        }
+      }
+
+      return {
+        ...state,
+        points: newPoints,
+        sequences: newSequences,
+        currentDifficulty: newDifficulty,
+      };
+
+    case 'count':
+      return {
+        ...state,
+        count: count + 1,
+      }
+
+    default:
+      return state;
+  }
+};
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const { data } = await api.get('api_category.php');
@@ -103,108 +209,25 @@ export default function Questions({ categoryId, responseCode, questions }: IQues
   const [question, setQuestion] = useState(questions[0]);
   const [answer, setAnswer] = useState('');
   const [isAnswerCorrect, setIsAnswerCorrect] = useState<Boolean | undefined>(undefined);
-  const [questionsCount, setQuestionsCount] = useState(1);
-  const [currentDifficulty, setCurrentDifficulty] = useState(question.difficultyName);
   const [isQuestionsResultModalOpen, setIsQuestionsResultModalOpen] = useState(false);
-  const [sequences, setSequences] = useState<ISequences>({ hit: 0, miss: 0 });
-  const [score, setScore] = useState<IScore>({ easy: { hit: 0, miss: 0 }, medium: { hit: 0, miss: 0 }, hard: { hit: 0, miss: 0 } });
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   function handleSubmit(event: FormEvent) {
     event.preventDefault();
-
-    let newScore = score;
-    switch (question.difficultyName) {
-      case 'easy':
-        (isAnswerCorrect) ? newScore.easy.hit++ : newScore.easy.miss++;
-        break;
-
-      case 'medium':
-        (isAnswerCorrect) ? newScore.medium.hit++ : newScore.medium.miss++;
-        break;
-
-      case 'hard':
-        (isAnswerCorrect) ? newScore.hard.hit++ : newScore.hard.miss++;
-        break;
-
-      default:
-        break;
-    }
-    setScore(newScore);
-
-    let newSequences = sequences;
-    if (isAnswerCorrect) {
-      newSequences.miss = 0;
-      if (newSequences.hit < 2) newSequences.hit++;
-    } else {
-      newSequences.hit = 0;
-      if (newSequences.miss < 2) newSequences.miss++;
-    }
-    setSequences(newSequences);
-
-    if (sequences.hit === 2) {
-      switch (currentDifficulty) {
-        case 'easy':
-          setCurrentDifficulty('medium');
-          setSequences({
-            hit: 0,
-            miss: 0,
-          });
-          break;
-
-        case 'medium':
-          setCurrentDifficulty('hard');
-          setSequences({
-            hit: 0,
-            miss: 0,
-          });
-          break;
-
-        default:
-          break;
-      }
-    }
-
-    if (sequences.miss === 2) {
-      switch (currentDifficulty) {
-        case 'hard':
-          setCurrentDifficulty('medium');
-          setSequences({
-            hit: 0,
-            miss: 0,
-          });
-          break;
-
-        case 'medium':
-          setCurrentDifficulty('easy');
-          setSequences({
-            hit: 0,
-            miss: 0,
-          });
-          break;
-
-        default:
-          break;
-      }
-    }
-
+    dispatch({ type: (isAnswerCorrect) ? 'hit' : 'miss' });
     setIsQuestionsResultModalOpen(true);
   }
 
   function handleAnswerToggle(answer: string) {
     setAnswer(answer);
-
-    if (answer === question.correctAnswer) {
-      setIsAnswerCorrect(true);
-    } else {
-      setIsAnswerCorrect(false);
-    }
+    (answer === question.correctAnswer) ? setIsAnswerCorrect(true) : setIsAnswerCorrect(false);
   }
 
   async function handleNextQuestion() {
-    if (questionsCount >= 10) {
+    if (state.count >= 10) {
       saveReport({
         categoryId,
-        score,
+        points: state.points,
       });
 
       router.push(`/reports/${categoryId}`);
@@ -212,12 +235,12 @@ export default function Questions({ categoryId, responseCode, questions }: IQues
 
     const data = await newQuestion({
       categoryId,
-      categoryDifficulty: currentDifficulty,
+      categoryDifficulty: state.currentDifficulty,
     });
 
+    dispatch({ type: 'count' });
     setQuestion(data.questions[0]);
     setIsQuestionsResultModalOpen(false);
-    setQuestionsCount(questionsCount + 1);
     setAnswer('');
   }
 
@@ -239,14 +262,14 @@ export default function Questions({ categoryId, responseCode, questions }: IQues
             <QuestionHeader title={question.category} />
             <div className={styles.questionCard} >
               <header>
-                <h3>Question {questionsCount}</h3>
+                <h3>Question {state.count}</h3>
                 <span>
                   <i>
                     {[...Array(question.difficultyNumber)].map((e, i) => {
                       return <RiStarSFill size={14} key={i} />
                     })}
                   </i>
-                  {question.difficultyName}
+                  {state.currentDifficulty}
                 </span>
               </header>
 
