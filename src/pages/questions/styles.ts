@@ -1,4 +1,24 @@
-.questionsContainer {
+import { lighten } from 'polished';
+import styled, { css } from 'styled-components';
+import { Modal } from '../../components/Modal';
+
+interface IModalProps {
+  type?: 'default' | 'hit' | 'miss';
+};
+
+const modalIconVariations = {
+  default: css`
+    background-color: ${props => props.theme.colors.button};
+  `,
+  hit: css`
+    background-color: ${props => props.theme.colors.hit};
+  `,
+  miss: css`
+    background-color: ${props => props.theme.colors.miss};
+  `,
+};
+
+export const Container = styled.div`
   position: relative;
 
   display: flex;
@@ -14,17 +34,17 @@
   @media (min-width: 768px) {
     max-width: 700px;
   }
-}
+`;
 
-.questionCard {
+export const Card = styled.div`
   padding: 1.875rem 2.5rem;
 
   border-radius: 8px;
-  border: 1px solid var(--platinum);
+  border: 1px solid ${props => props.theme.colors.border};
 
-  background-color: var(--white);
+  background-color: ${props => props.theme.colors.white};
 
-  box-shadow: 0px 1px 4px var(--box-shadow);
+  box-shadow: 0px 1px 4px ${props => props.theme.colors.boxShadow};
 
   header {
     display: flex;
@@ -45,10 +65,10 @@
       padding: 0.25rem 0.5rem;
 
       text-transform: capitalize;
-      color: var(--space-cadet);
+      color: ${props => props.theme.colors.highlighted};
 
       border-radius: 14px;
-      background: rgba(52, 60, 88, 0.2);
+      background: ${props => lighten(0.6, props.theme.colors.highlighted)};
 
       i {
         font-size: 0;
@@ -83,9 +103,9 @@
 
       line-height: 1.5rem;
 
-      border: 1px solid var(--light-grey);
+      border: 1px solid ${props => props.theme.colors.borderGrey};
 
-      box-shadow: 0px 1px 2px var(--box-shadow);
+      box-shadow: 0px 1px 2px ${props => props.theme.colors.boxShadow};
       border-radius: 8px;
 
       cursor: pointer;
@@ -96,7 +116,7 @@
     }
 
     input:checked + label {
-      border: 3px solid var(--button);
+      border: 3px solid ${props => props.theme.colors.button};
     }
 
     button {
@@ -107,12 +127,12 @@
 
       font-family: "Nunito", sans-serif;
       line-height: 1.5rem;
-      color: var(--white);
+      color: ${props => props.theme.colors.white};
 
       border: none;
       border-radius: 8px;
 
-      background-color: var(--button);
+      background-color:  ${props => props.theme.colors.button};;
 
       transition: filter 0.4s;
 
@@ -121,7 +141,7 @@
       }
 
       &:disabled {
-        background-color: var(--button-disabled);
+        background-color: ${props => props.theme.colors.buttonDisabled};
 
         cursor: not-allowed;
       }
@@ -131,66 +151,9 @@
       }
     }
   }
-}
+`;
 
-.questionResultModalOverlay {
-  position: absolute;
-
-  top: 0;
-  left: 0;
-
-  width: 100%;
-  height: 100%;
-
-  background-color: var(--box-shadow);
-}
-
-.questionResultModalContainer {
-  position: absolute;
-
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  top: 50%;
-  right: 50%;
-  bottom: 50%;
-  left: 50%;
-
-  transform: translate(-50%, -100%);
-
-  width: 100%;
-  height: 100%;
-  max-width: 328px;
-  max-height: 228px;
-
-  padding: 2rem;
-
-  border-radius: 8px;
-  border: 3px solid transparent;
-
-  background-color: var(--white);
-
-  box-shadow: 0px 3px 6px var(--box-shadow);
-
-  &.hit {
-    border-color: var(--hit);
-
-    i {
-      background-color: var(--hit);
-    }
-  }
-
-  &.miss {
-    border-color: var(--miss);
-
-    i {
-      background-color: var(--miss);
-    }
-  }
-
+export const ModalResult = styled(Modal)`
   i {
     display: flex;
     justify-content: center;
@@ -203,14 +166,16 @@
 
     font-size: 0;
     line-height: 0;
-    color: var(--white);
+    color: ${props => props.theme.colors.white};
+
+    ${props => modalIconVariations[props.type || 'default']}
   }
 
   p {
     text-align: center;
     font-size: 1.5rem;
     line-height: 2rem;
-    color: var(--space-cadet);
+    color: ${props => props.theme.colors.highlighted};
   }
 
   button {
@@ -227,8 +192,8 @@
     border: none;
     border-radius: 8px;
 
-    color: var(--white);
+    color: ${props => props.theme.colors.white};
 
-    background-color: var(--button);
+    background-color: ${props => props.theme.colors.button};
   }
-}
+`;

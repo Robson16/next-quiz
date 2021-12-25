@@ -1,12 +1,9 @@
-import { useContext } from 'react';
 import type { GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
-
+import { useContext } from 'react';
 import { ReportContext } from '../contexts/ReportContext';
-
 import { api } from '../services/api';
-
-import styles from '../styles/Home.module.scss';
+import { CategoriesGrid, Category, Container, Homepage } from '../styles/Home';
 
 interface ICategoryProps {
   id: number;
@@ -46,22 +43,21 @@ export default function Home({ categories }: IHomeProps) {
   }
 
   return (
-    <div className={styles.homepage}>
-      <div className={styles.container}>
+    <Homepage>
+      <Container>
         <h2>Categories</h2>
 
-        <div className={styles.categoriesGrid}>
+        <CategoriesGrid>
           {categories.map((category) => (
-            <a
+            <Category
               key={category.id}
-              className={styles.category}
               onClick={() => handleSelectCategory(category.id)}
             >
               <span>{category.name}</span>
-            </a>
+            </Category>
           ))}
-        </div>
-      </div>
-    </div>
+        </CategoriesGrid>
+      </Container>
+    </Homepage>
   );
 }

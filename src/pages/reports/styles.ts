@@ -1,4 +1,6 @@
-.reportContainer {
+import styled from 'styled-components';
+
+export const Container = styled.div`
   position: relative;
 
   display: flex;
@@ -14,9 +16,9 @@
   @media (min-width: 768px) {
     max-width: 700px;
   }
-}
+`;
 
-.reportCard {
+export const Card = styled.div`
   display: flex;
   flex-direction: column;
 
@@ -24,9 +26,9 @@
 
   border-radius: 8px;
 
-  background-color: var(--white);
+  background-color: ${props => props.theme.colors.white};
 
-  box-shadow: 0px 1px 4px var(--box-shadow);
+  box-shadow: 0px 1px 4px ${props => props.theme.colors.boxShadow};
 
   header {
     position: relative;
@@ -43,7 +45,7 @@
     border-top-right-radius: 8px;
     border-top-left-radius: 8px;
 
-    background-color: #438de4;
+    background-color: ${props => props.theme.colors.backgroundCardHeader};
 
     & > div {
       display: flex;
@@ -65,7 +67,7 @@
         font-size: 1.125rem;
         line-height: 1.5rem;
         text-align: center;
-        color: var(--white);
+        color: ${props => props.theme.colors.white};
 
         @media (min-width: 576px) {
           text-align: left;
@@ -83,13 +85,12 @@
       padding: 0.75rem 1rem;
       border-radius: 5px;
 
-      background-color: var(--white);
+      background-color: ${props => props.theme.colors.white};
 
-      box-shadow: 0px 4px 4px var(--box-shadow);
+      box-shadow: 0px 4px 4px ${props => props.theme.colors.boxShadow};
 
       font-weight: bold;
       text-align: center;
-      color: var(--space-cadet);
 
       transform: translateY(45%);
     }
@@ -102,13 +103,13 @@
     border: none;
     border-radius: 8px;
 
-    color: var(--white);
+    color: ${props => props.theme.colors.white};
 
-    background-color: var(--button);
+    background-color: ${props => props.theme.colors.button};
   }
-}
+`;
 
-.resultValues {
+export const Results = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -121,7 +122,7 @@
     padding: 0.5rem 2.5rem;
 
     border-radius: 10px;
-    background-color: var(--platinum);
+    background-color: ${props => props.theme.colors.background};
 
     span {
       display: flex;
@@ -132,7 +133,6 @@
       font-weight: bold;
       line-height: 2.25rem;
       text-align: center;
-      color: var(--space-cadet);
 
       small {
         font-size: 0.813rem;
@@ -165,7 +165,7 @@
 
       @media (min-width: 576px) {
         &:not(:last-child) {
-          border-right: 1px solid var(--light-grey);
+          border-right: 1px solid ${props => props.theme.colors.borderGrey};
         }
       }
     }
@@ -186,8 +186,8 @@
 
       &:first-child {
         font-weight: bold;
-        color: var(--space-cadet);
+        color: ${props => props.theme.colors.link};
       }
     }
   }
-}
+`;

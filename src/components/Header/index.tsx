@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import styles from './styles.module.scss';
+import { Container } from './styles';
 
 interface IHeaderProps {
   children: ReactNode;
@@ -7,8 +7,8 @@ interface IHeaderProps {
 
 export function Header({ children }: IHeaderProps) {
   return (
-    <header className={styles.headerContainer}>
+    <Container>
       {children}
-    </header>
+    </Container>
   );
 }

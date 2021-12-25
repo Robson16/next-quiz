@@ -1,17 +1,14 @@
-import { FormEvent, useState, useEffect, useRef, useContext, useReducer } from 'react';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import { ParsedUrlQuery } from 'querystring';
+import { FormEvent, useContext, useEffect, useReducer, useRef, useState } from 'react';
+import { HiCheck, HiOutlineArrowRight, HiX } from 'react-icons/hi';
 import { RiStarSFill } from 'react-icons/ri';
-import { HiCheck, HiX, HiOutlineArrowRight } from 'react-icons/hi';
-
+import { QuestionHeader } from '../../components/QuestionHeader';
 import { ReportContext } from '../../contexts/ReportContext';
-
 import { api } from '../../services/api';
 import { newQuestion } from '../../utils/newQuestion';
-import { QuestionHeader } from '../../components/QuestionHeader';
-
-import styles from './question.module.scss';
+import { Card, Container, ModalResult } from './styles';
 
 interface ICategory {
   id: number;
@@ -254,13 +251,13 @@ export default function Questions({ categoryId, responseCode, questions }: IQues
 
   return (
     <>
-      <div className={styles.questionsContainer}>
+      <Container>
         {responseCode === 1 ? (
           <QuestionHeader title='No questions in this category' />
         ) : (
           <>
             <QuestionHeader title={question.category} />
-            <div className={styles.questionCard} >
+            <Card>
               <header>
                 <h3>Question {state.count}</h3>
                 <span>
@@ -300,34 +297,24 @@ export default function Questions({ categoryId, responseCode, questions }: IQues
                   Reply
                 </button>
               </form>
-
-            </div>
+            </Card>
           </>
         )}
-      </div>
+      </Container>
 
       {isQuestionsResultModalOpen && (
-        <div className={styles.questionResultModal}>
-          <div className={styles.questionResultModalOverlay}>
-            <div
-              className={`
-                ${styles.questionResultModalContainer}
-                ${(isAnswerCorrect) ? styles.hit : styles.miss}
-              `}
-            >
-              {isAnswerCorrect
-                ? <i><HiCheck size={32} /></i>
-                : <i><HiX size={32} /></i>}
-              <p>
-                {isAnswerCorrect ? 'You\'re right!' : 'You missed!'}
-              </p>
-              <button type='button' onClick={handleNextQuestion}>
-                <span>Advance</span>
-                <HiOutlineArrowRight size={24} />
-              </button>
-            </div>
-          </div>
-        </div >
+        <ModalResult type={isAnswerCorrect ? 'hit' : 'miss'}>
+          {isAnswerCorrect
+            ? <i><HiCheck size={32} /></i>
+            : <i><HiX size={32} /></i>}
+          <p>
+            {isAnswerCorrect ? 'You\'re right!' : 'You missed!'}
+          </p>
+          <button type='button' onClick={handleNextQuestion}>
+            <span>Advance</span>
+            <HiOutlineArrowRight size={24} />
+          </button>
+        </ModalResult>
       )}
     </>
   );

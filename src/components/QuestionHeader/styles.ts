@@ -1,4 +1,6 @@
-.questionHeader {
+import styled from 'styled-components'
+
+export const Container = styled.header`
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -19,6 +21,6 @@
     line-height: 2rem;
     font-size: 0.875rem;
     font-weight: 700;
-    color: var(--davys-grey);
+    color: ${props => props.theme.colors.link};
   }
-}
+`;

@@ -1,12 +1,10 @@
-import { useContext, useEffect, useState } from 'react'
-import { useRouter } from 'next/router';
-import Link from 'next/link';
-import Image from 'next/image';
 import Head from 'next/head';
-
+import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useContext, useEffect, useState } from 'react';
 import { ReportContext } from '../../contexts/ReportContext';
-
-import styles from './report.module.scss';
+import { Container, Card, Results } from './styles';
 
 interface IPoint {
   hit: number,
@@ -39,11 +37,11 @@ export default function Reports() {
   }, [categoryId, reports]);
 
   return (
-    <div className={styles.reportContainer}>
+    <Container>
       <Head>
         <title>Results | Next Quiz</title>
       </Head>
-      <div className={styles.reportCard}>
+      <Card>
         <header>
           <div>
             <Image
@@ -61,8 +59,8 @@ export default function Reports() {
           <span>See your performance on the questions</span>
         </header>
         {report ? (
-          <div className={styles.resultValues}>
-            <div className={styles.total}>
+          <Results>
+            <div className="total">
               <span>
                 {report.points.easy.hit + report.points.medium.hit + report.points.hard.hit}
                 <small>Hits</small>
@@ -72,7 +70,7 @@ export default function Reports() {
                 <small>Miss</small>
               </span>
             </div>
-            <div className={styles.difficulties}>
+            <div className="difficulties">
               <div>
                 <ul>
                   <li>Easy</li>
@@ -95,17 +93,17 @@ export default function Reports() {
                 </ul>
               </div>
             </div>
-          </div>
+          </Results>
         ) : (
-          <div className={styles.resultValues}>
+          <Results>
             <p>Not found</p>
-          </div>
+          </Results>
         )}
 
         <Link href='/' passHref>
           <button type='button'>Back to start</button>
         </Link>
-      </div>
-    </div >
+      </Card>
+    </Container >
   );
 }

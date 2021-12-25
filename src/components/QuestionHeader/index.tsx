@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { RiCloseCircleLine } from 'react-icons/ri';
-
-import styles from './styles.module.scss';
+import { Container } from './styles';
 
 interface IQuestionHeaderProps {
   title: string;
@@ -9,7 +8,7 @@ interface IQuestionHeaderProps {
 
 export function QuestionHeader({ title }: IQuestionHeaderProps) {
   return (
-    <header className={styles.questionHeader}>
+    <Container>
       <h2>{title}</h2>
       <Link href='/'>
         <a>
@@ -17,6 +16,6 @@ export function QuestionHeader({ title }: IQuestionHeaderProps) {
           Close
         </a>
       </Link>
-    </header>
+    </Container>
   );
 }
