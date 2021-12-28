@@ -2,7 +2,7 @@ import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import 'normalize.css';
 import { ThemeProvider } from 'styled-components';
-import { Header } from '../components/Header';
+import { Navbar } from '../components/Navbar';
 import { ReportProvider } from '../contexts/ReportContext';
 import GlobalStyle from '../styles/globals';
 import theme from '../styles/theme';
@@ -15,9 +15,9 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         <title>Next Quiz</title>
       </Head>
       <>
-        <Header>
+        <Navbar>
           <h1>Next Quiz</h1>
-        </Header>
+        </Navbar>
         <ReportProvider>
           <Component {...pageProps} />
         </ReportProvider>

@@ -1,12 +1,12 @@
-import { ReactNode } from 'react';
+import { ReactNode } from "react";
 import { Container } from './styles';
 
-interface IHeaderProps {
+interface ICardProps {
   children: ReactNode;
   className?: string;
 }
 
-export function Header({ children, className = "" }: IHeaderProps) {
+export function Card({ children, className = "" }: ICardProps) {
   return (
     <Container className={className}>
       {children}

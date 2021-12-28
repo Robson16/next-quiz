@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
 import { ReportContext } from '../../contexts/ReportContext';
-import { Container, Card, Results } from './styles';
+import { Container, ReportCard, Results } from '../../styles/Report';
 
 interface IPoint {
   hit: number,
@@ -41,7 +41,7 @@ export default function Reports() {
       <Head>
         <title>Results | Next Quiz</title>
       </Head>
-      <Card>
+      <ReportCard>
         <header>
           <div>
             <Image
@@ -103,7 +103,7 @@ export default function Reports() {
         <Link href='/' passHref>
           <button type='button'>Back to start</button>
         </Link>
-      </Card>
+      </ReportCard>
     </Container >
   );
 }

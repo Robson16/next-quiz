@@ -1,14 +1,14 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ParsedUrlQuery } from 'querystring';
 import { FormEvent, useContext, useEffect, useReducer, useRef, useState } from 'react';
 import { HiCheck, HiOutlineArrowRight, HiX } from 'react-icons/hi';
-import { RiStarSFill } from 'react-icons/ri';
-import { QuestionHeader } from '../../components/QuestionHeader';
+import { RiCloseCircleLine, RiStarSFill } from 'react-icons/ri';
 import { ReportContext } from '../../contexts/ReportContext';
 import { api } from '../../services/api';
+import { Container, ModalResult, QuestionCard, QuestionHeader } from '../../styles/Question';
 import { newQuestion } from '../../utils/newQuestion';
-import { Card, Container, ModalResult } from './styles';
 
 interface ICategory {
   id: number;
@@ -253,11 +253,21 @@ export default function Questions({ categoryId, responseCode, questions }: IQues
     <>
       <Container>
         {responseCode === 1 ? (
-          <QuestionHeader title='No questions in this category' />
+          <QuestionHeader>
+            <h2>No questions in this category</h2>
+          </QuestionHeader>
         ) : (
           <>
-            <QuestionHeader title={question.category} />
-            <Card>
+            <QuestionHeader>
+              <h2>{question.category}</h2>
+              <Link href='/'>
+                <a>
+                  <RiCloseCircleLine size={18} />
+                  Close
+                </a>
+              </Link>
+            </QuestionHeader>
+            <QuestionCard>
               <header>
                 <h3>Question {state.count}</h3>
                 <span>
@@ -297,7 +307,7 @@ export default function Questions({ categoryId, responseCode, questions }: IQues
                   Reply
                 </button>
               </form>
-            </Card>
+            </QuestionCard>
           </>
         )}
       </Container>

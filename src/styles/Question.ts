@@ -1,6 +1,8 @@
 import { lighten } from 'polished';
 import styled, { css } from 'styled-components';
-import { Modal } from '../../components/Modal';
+import { Card } from '../components/Card';
+import { Header } from '../components/Header';
+import { Modal } from '../components/Modal';
 
 interface IModalProps {
   type?: 'default' | 'hit' | 'miss';
@@ -36,15 +38,32 @@ export const Container = styled.div`
   }
 `;
 
-export const Card = styled.div`
+export const QuestionHeader = styled(Header)`
+  align-items: flex-start;
+  justify-content: space-between;
+
+  h2 {
+    margin: 0 0 1rem;
+    line-height: 2rem;
+    font-size: 1.5rem;
+    font-weight: 500;
+  }
+
+  a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.25rem;
+
+    line-height: 2rem;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: ${props => props.theme.colors.link};
+  }
+`;
+
+export const QuestionCard = styled(Card)`
   padding: 1.875rem 2.5rem;
-
-  border-radius: 8px;
-  border: 1px solid ${props => props.theme.colors.border};
-
-  background-color: ${props => props.theme.colors.white};
-
-  box-shadow: 0px 1px 4px ${props => props.theme.colors.boxShadow};
 
   header {
     display: flex;
