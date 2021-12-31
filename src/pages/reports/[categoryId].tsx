@@ -6,6 +6,8 @@ import { useContext, useEffect, useState } from 'react';
 import { ReportContext } from '../../contexts/ReportContext';
 import { Container, ReportCard, Results } from '../../styles/Report';
 
+import MascotImage from '../../assets/mascot.svg';
+
 interface IPoint {
   hit: number,
   miss: number,
@@ -44,13 +46,7 @@ export default function Reports() {
       <ReportCard>
         <header>
           <div>
-            <Image
-              src='/mascot.svg'
-              width={105}
-              height={115}
-              alt='Mascot'
-              objectFit='contain'
-            />
+            <MascotImage />
             <div>
               <p>Congratulations!</p>
               <p>You finished the test</p>
