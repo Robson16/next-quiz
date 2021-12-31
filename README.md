@@ -20,10 +20,10 @@ You need to have [Node.js](https://nodejs.org/) installed, then you can clone an
 
 ```bash
 # Clone this repository
-$ git clone https://github.com/Robson16/teste-tecnico-dev-frontend-robson-henrique-rodrigues.git
+$ git clone https://github.com/Robson16/next-quiz.git
 
 # Go to project folder
-$ cd teste-tecnico-dev-frontend-robson-henrique-rodrigues
+$ cd next-quiz
 
 # install dependencies
 $ npm install
