@@ -1,13 +1,24 @@
-import { GetStaticPaths, GetStaticProps } from 'next';
+import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ParsedUrlQuery } from 'querystring';
-import { FormEvent, useContext, useEffect, useReducer, useRef, useState } from 'react';
+import {
+  FormEvent,
+  useContext,
+  useEffect,
+  useReducer,
+  useRef,
+  useState,
+} from 'react';
 import { HiCheck, HiOutlineArrowRight, HiX } from 'react-icons/hi';
 import { RiCloseCircleLine, RiStarSFill } from 'react-icons/ri';
 import { ReportContext } from '../../contexts/ReportContext';
-import { api } from '../../services/api';
-import { Container, ModalResult, QuestionCard, QuestionHeader } from '../../styles/Question';
+import {
+  Container,
+  ModalResult,
+  QuestionCard,
+  QuestionHeader,
+} from '../../styles/Question';
 import { newQuestion } from '../../utils/newQuestion';
 
 interface ICategory {
@@ -26,25 +37,25 @@ interface IQuestion {
 }
 
 interface IPoint {
-  hit: number,
-  miss: number,
+  hit: number;
+  miss: number;
 }
 
 interface IDifficultyPoints {
-  easy: IPoint,
-  medium: IPoint,
-  hard: IPoint,
+  easy: IPoint;
+  medium: IPoint;
+  hard: IPoint;
 }
 
 interface IState {
-  count: number,
-  currentDifficulty: string,
-  sequences: IPoint,
-  points: IDifficultyPoints,
+  count: number;
+  currentDifficulty: string;
+  sequences: IPoint;
+  points: IDifficultyPoints;
 }
 
 interface IAction {
-  type: 'hit' | 'miss' | 'count'
+  type: 'hit' | 'miss' | 'count';
 }
 
 interface IQuestionsProps {
@@ -54,27 +65,27 @@ interface IQuestionsProps {
 }
 
 interface IParams extends ParsedUrlQuery {
-  id: string
+  id: string;
 }
 
 const initialState = {
   points: {
     easy: {
       hit: 0,
-      miss: 0
+      miss: 0,
     },
     medium: {
       hit: 0,
-      miss: 0
+      miss: 0,
     },
     hard: {
       hit: 0,
-      miss: 0
+      miss: 0,
     },
   },
   sequences: {
     hit: 0,
-    miss: 0
+    miss: 0,
   },
   count: 1,
   currentDifficulty: 'medium',
@@ -90,25 +101,34 @@ const reducer = (state: IState, action: IAction): IState => {
   switch (action.type) {
     case 'hit':
       if (currentDifficulty === 'easy') {
-        newPoints = { ...points, easy: { ...points.easy, hit: points.easy.hit + 1 } }
+        newPoints = {
+          ...points,
+          easy: { ...points.easy, hit: points.easy.hit + 1 },
+        };
       }
       if (currentDifficulty === 'medium') {
-        newPoints = { ...points, medium: { ...points.medium, hit: points.medium.hit + 1 } }
+        newPoints = {
+          ...points,
+          medium: { ...points.medium, hit: points.medium.hit + 1 },
+        };
       }
       if (currentDifficulty === 'hard') {
-        newPoints = { ...points, hard: { ...points.hard, hit: points.hard.hit + 1 } }
+        newPoints = {
+          ...points,
+          hard: { ...points.hard, hit: points.hard.hit + 1 },
+        };
       }
 
       newSequences = { ...sequences, hit: sequences.hit + 1, miss: 0 };
 
       if (newSequences.hit >= 2) {
-        if (currentDifficulty === "easy") {
+        if (currentDifficulty === 'easy') {
           newSequences = { ...sequences, hit: 0, miss: 0 };
-          newDifficulty = "medium";
+          newDifficulty = 'medium';
         }
-        if (currentDifficulty === "medium") {
+        if (currentDifficulty === 'medium') {
           newSequences = { ...sequences, hit: 0, miss: 0 };
-          newDifficulty = "hard";
+          newDifficulty = 'hard';
         }
       }
 
@@ -121,25 +141,34 @@ const reducer = (state: IState, action: IAction): IState => {
 
     case 'miss':
       if (currentDifficulty === 'easy') {
-        newPoints = { ...points, easy: { ...points.easy, miss: points.easy.miss + 1 } }
+        newPoints = {
+          ...points,
+          easy: { ...points.easy, miss: points.easy.miss + 1 },
+        };
       }
       if (currentDifficulty === 'medium') {
-        newPoints = { ...points, medium: { ...points.medium, miss: points.medium.miss + 1 } }
+        newPoints = {
+          ...points,
+          medium: { ...points.medium, miss: points.medium.miss + 1 },
+        };
       }
       if (currentDifficulty === 'hard') {
-        newPoints = { ...points, hard: { ...points.hard, miss: points.hard.miss + 1 } }
+        newPoints = {
+          ...points,
+          hard: { ...points.hard, miss: points.hard.miss + 1 },
+        };
       }
 
       newSequences = { ...sequences, miss: sequences.miss + 1, hit: 0 };
 
       if (newSequences.miss >= 2) {
-        if (currentDifficulty === "hard") {
+        if (currentDifficulty === 'hard') {
           newSequences = { ...sequences, hit: 0, miss: 0 };
-          newDifficulty = "medium";
+          newDifficulty = 'medium';
         }
-        if (currentDifficulty === "medium") {
+        if (currentDifficulty === 'medium') {
           newSequences = { ...sequences, hit: 0, miss: 0 };
-          newDifficulty = "easy";
+          newDifficulty = 'easy';
         }
       }
 
@@ -154,50 +183,45 @@ const reducer = (state: IState, action: IAction): IState => {
       return {
         ...state,
         count: count + 1,
-      }
+      };
 
     default:
       return state;
   }
 };
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  const { data } = await api.get('api_category.php');
-  const categories = data.trivia_categories;
+export const getServerSideProps: GetServerSideProps = async context => {
+  try {
+    const { id } = context.params as IParams;
 
-  const paths = categories.map((category: ICategory) => {
-    return {
-      params: {
-        id: String(category.id),
-      }
-    }
-  });
-
-  return {
-    paths,
-    fallback: 'blocking'
-  }
-}
-
-export const getStaticProps: GetStaticProps = async (context) => {
-  const { id } = context.params as IParams;
-
-  const data = await newQuestion({
-    categoryId: Number(id),
-    categoryDifficulty: 'medium'
-  });
-
-  return {
-    props: {
+    const data = await newQuestion({
       categoryId: Number(id),
-      responseCode: data.responseCode,
-      questions: data.questions,
-    },
-    revalidate: 60 * 5 // 5 Minutes
-  }
-}
+      categoryDifficulty: 'medium',
+    });
 
-export default function Questions({ categoryId, responseCode, questions }: IQuestionsProps) {
+    return {
+      props: {
+        categoryId: Number(id),
+        responseCode: data.responseCode,
+        questions: data.questions,
+      },
+    };
+  } catch (error) {
+    console.error(error);
+
+    return {
+      props: {
+        questions: [],
+      },
+    };
+  }
+};
+
+export default function Questions({
+  categoryId,
+  responseCode,
+  questions,
+}: IQuestionsProps) {
   const { saveReport } = useContext(ReportContext);
 
   const router = useRouter();
@@ -205,19 +229,24 @@ export default function Questions({ categoryId, responseCode, questions }: IQues
 
   const [question, setQuestion] = useState(questions[0]);
   const [answer, setAnswer] = useState('');
-  const [isAnswerCorrect, setIsAnswerCorrect] = useState<Boolean | undefined>(undefined);
-  const [isQuestionsResultModalOpen, setIsQuestionsResultModalOpen] = useState(false);
+  const [isAnswerCorrect, setIsAnswerCorrect] = useState<Boolean | undefined>(
+    undefined,
+  );
+  const [isQuestionsResultModalOpen, setIsQuestionsResultModalOpen] =
+    useState(false);
   const [state, dispatch] = useReducer(reducer, initialState);
 
   function handleSubmit(event: FormEvent) {
     event.preventDefault();
-    dispatch({ type: (isAnswerCorrect) ? 'hit' : 'miss' });
+    dispatch({ type: isAnswerCorrect ? 'hit' : 'miss' });
     setIsQuestionsResultModalOpen(true);
   }
 
   function handleAnswerToggle(answer: string) {
     setAnswer(answer);
-    (answer === question.correctAnswer) ? setIsAnswerCorrect(true) : setIsAnswerCorrect(false);
+    answer === question.correctAnswer
+      ? setIsAnswerCorrect(true)
+      : setIsAnswerCorrect(false);
   }
 
   async function handleNextQuestion() {
@@ -260,7 +289,7 @@ export default function Questions({ categoryId, responseCode, questions }: IQues
           <>
             <QuestionHeader>
               <h2>{question.category}</h2>
-              <Link href='/'>
+              <Link href="/">
                 <a>
                   <RiCloseCircleLine size={18} />
                   Close
@@ -273,7 +302,7 @@ export default function Questions({ categoryId, responseCode, questions }: IQues
                 <span>
                   <i>
                     {[...Array(question.difficultyNumber)].map((e, i) => {
-                      return <RiStarSFill size={14} key={i} />
+                      return <RiStarSFill size={14} key={i} />;
                     })}
                   </i>
                   {state.currentDifficulty}
@@ -287,8 +316,8 @@ export default function Questions({ categoryId, responseCode, questions }: IQues
                   return (
                     <div key={index}>
                       <input
-                        type='radio'
-                        name='alternative'
+                        type="radio"
+                        name="alternative"
                         id={`alternative-${index}`}
                         onClick={() => handleAnswerToggle(alternative)}
                       />
@@ -300,10 +329,7 @@ export default function Questions({ categoryId, responseCode, questions }: IQues
                   );
                 })}
 
-                <button
-                  type='submit'
-                  disabled={!answer.length}
-                >
+                <button type="submit" disabled={!answer.length}>
                   Reply
                 </button>
               </form>
@@ -314,13 +340,17 @@ export default function Questions({ categoryId, responseCode, questions }: IQues
 
       {isQuestionsResultModalOpen && (
         <ModalResult type={isAnswerCorrect ? 'hit' : 'miss'}>
-          {isAnswerCorrect
-            ? <i><HiCheck size={32} /></i>
-            : <i><HiX size={32} /></i>}
-          <p>
-            {isAnswerCorrect ? 'You\'re right!' : 'You missed!'}
-          </p>
-          <button type='button' onClick={handleNextQuestion}>
+          {isAnswerCorrect ? (
+            <i>
+              <HiCheck size={32} />
+            </i>
+          ) : (
+            <i>
+              <HiX size={32} />
+            </i>
+          )}
+          <p>{isAnswerCorrect ? "You're right!" : 'You missed!'}</p>
+          <button type="button" onClick={handleNextQuestion}>
             <span>Advance</span>
             <HiOutlineArrowRight size={24} />
           </button>
