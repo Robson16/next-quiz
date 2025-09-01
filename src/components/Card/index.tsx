@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode } from 'react';
 import { Container } from './styles';
 
 interface ICardProps {
@@ -6,10 +6,6 @@ interface ICardProps {
   className?: string;
 }
 
-export function Card({ children, className = "" }: ICardProps) {
-  return (
-    <Container className={className}>
-      {children}
-    </Container>
-  );
+export function Card({ children, className = '' }: ICardProps) {
+  return <Container className={className}>{children}</Container>;
 }

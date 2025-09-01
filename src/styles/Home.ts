@@ -1,7 +1,7 @@
-import styled from "styled-components"
+import styled from 'styled-components';
 
 export const Homepage = styled.div`
-display: flex;
+  display: flex;
   flex: 1;
 
   min-height: 100vh;
@@ -17,7 +17,7 @@ export const Container = styled.div`
   margin: 0 auto;
   padding: 1rem 1rem 2rem;
 
-  @media(min-width: 1200px) {
+  @media (min-width: 1200px) {
     max-width: 1140px;
   }
 `;
@@ -27,15 +27,15 @@ export const CategoriesGrid = styled.div`
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
 
-  @media(min-width: 576px) {
+  @media (min-width: 576px) {
     grid-template-columns: repeat(3, 1fr);
   }
 
-  @media(min-width: 768px) {
+  @media (min-width: 768px) {
     grid-template-columns: repeat(4, 1fr);
   }
 
-  @media(min-width: 992px) {
+  @media (min-width: 992px) {
   }
 `;
 

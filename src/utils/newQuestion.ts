@@ -30,14 +30,17 @@ interface INewQuestionDTO {
   questions: IQuestion[];
 }
 
-export const newQuestion = async ({ categoryId, categoryDifficulty }: INewQuestionData): Promise<INewQuestionDTO> => {
+export const newQuestion = async ({
+  categoryId,
+  categoryDifficulty,
+}: INewQuestionData): Promise<INewQuestionDTO> => {
   const { data } = await api.get('api.php', {
     params: {
       amount: 1,
       category: categoryId,
       difficulty: categoryDifficulty,
       type: 'multiple',
-    }
+    },
   });
 
   const difficultyNames = ['easy', 'medium', 'hard'];
@@ -50,12 +53,15 @@ export const newQuestion = async ({ categoryId, categoryDifficulty }: INewQuesti
       difficultyNumber: difficultyNames.indexOf(question.difficulty, 0) + 1,
       questionText: question.question,
       correctAnswer: question.correct_answer,
-      alternatives: Shuffle([...question.incorrect_answers, question.correct_answer]),
+      alternatives: Shuffle([
+        ...question.incorrect_answers,
+        question.correct_answer,
+      ]),
     };
   });
 
   return {
     responseCode: data.response_code,
     questions,
-  }
-}
+  };
+};

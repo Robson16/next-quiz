@@ -13,7 +13,7 @@ const theme = {
     backgroundHeader: '#343c58',
     backgroundCardHeader: '#438de4',
     white: '#fff',
-  }
-}
+  },
+};
 
 export default theme;

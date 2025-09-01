@@ -6,10 +6,6 @@ interface IHeaderProps {
   className?: string;
 }
 
-export function Header({ children, className = "" }: IHeaderProps) {
-  return (
-    <Container className={className}>
-      {children}
-    </Container>
-  );
+export function Header({ children, className = '' }: IHeaderProps) {
+  return <Container className={className}>{children}</Container>;
 }

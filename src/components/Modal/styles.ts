@@ -1,4 +1,4 @@
-import styled, { css } from "styled-components";
+import styled, { css } from 'styled-components';
 
 interface IContainerProps {
   type?: 'default' | 'hit' | 'miss';

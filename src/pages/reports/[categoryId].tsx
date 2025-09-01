@@ -9,14 +9,14 @@ import { Container, ReportCard, Results } from '../../styles/Report';
 import MascotImage from '../../assets/mascot.svg';
 
 interface IPoint {
-  hit: number,
-  miss: number,
+  hit: number;
+  miss: number;
 }
 
 interface IDifficultyPoints {
-  easy: IPoint,
-  medium: IPoint,
-  hard: IPoint,
+  easy: IPoint;
+  medium: IPoint;
+  hard: IPoint;
 }
 
 interface IReport {
@@ -58,11 +58,15 @@ export default function Reports() {
           <Results>
             <div className="total">
               <span>
-                {report.points.easy.hit + report.points.medium.hit + report.points.hard.hit}
+                {report.points.easy.hit +
+                  report.points.medium.hit +
+                  report.points.hard.hit}
                 <small>Hits</small>
               </span>
               <span>
-                {report.points.easy.miss + report.points.medium.miss + report.points.hard.miss}
+                {report.points.easy.miss +
+                  report.points.medium.miss +
+                  report.points.hard.miss}
                 <small>Miss</small>
               </span>
             </div>
@@ -96,10 +100,10 @@ export default function Reports() {
           </Results>
         )}
 
-        <Link href='/' passHref>
-          <button type='button'>Back to start</button>
+        <Link href="/" passHref>
+          <button type="button">Back to start</button>
         </Link>
       </ReportCard>
-    </Container >
+    </Container>
   );
 }

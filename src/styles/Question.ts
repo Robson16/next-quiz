@@ -6,7 +6,7 @@ import { Modal } from '../components/Modal';
 
 interface IModalProps {
   type?: 'default' | 'hit' | 'miss';
-};
+}
 
 const modalIconVariations = {
   default: css`
@@ -71,7 +71,7 @@ export const QuestionCard = styled(Card)`
     justify-content: space-between;
 
     h3 {
-      font-family: "Nunito", sans-serif;
+      font-family: 'Nunito', sans-serif;
       font-size: 1.125rem;
       line-height: 1.5rem;
     }
@@ -144,14 +144,14 @@ export const QuestionCard = styled(Card)`
       width: 100%;
       height: 2.75rem;
 
-      font-family: "Nunito", sans-serif;
+      font-family: 'Nunito', sans-serif;
       line-height: 1.5rem;
       color: ${props => props.theme.colors.white};
 
       border: none;
       border-radius: 8px;
 
-      background-color:  ${props => props.theme.colors.button};;
+      background-color: ${props => props.theme.colors.button};
 
       transition: filter 0.4s;
 

@@ -2,14 +2,14 @@ import Cookies from 'js-cookie';
 import { createContext, ReactNode, useState } from 'react';
 
 interface IPoint {
-  hit: number,
-  miss: number,
+  hit: number;
+  miss: number;
 }
 
 interface IDifficultyPoints {
-  easy: IPoint,
-  medium: IPoint,
-  hard: IPoint,
+  easy: IPoint;
+  medium: IPoint;
+  hard: IPoint;
 }
 
 interface IReport {
@@ -31,7 +31,7 @@ export const ReportContext = createContext({} as ReportContextData);
 export function ReportProvider({ children }: ReportProviderProps) {
   const [reports, setReports] = useState<IReport[]>(() => {
     const reportsFromCookies = Cookies.get('next_quiz_reports');
-    return (reportsFromCookies) ? JSON.parse(reportsFromCookies) : [];
+    return reportsFromCookies ? JSON.parse(reportsFromCookies) : [];
   });
 
   function saveReport(report: IReport) {

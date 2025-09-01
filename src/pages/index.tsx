@@ -32,7 +32,7 @@ export default function Home({ categories }: IHomeProps) {
 
   function handleSelectCategory(categoryId: number) {
     const categoryAlreadyHasReport = reports.find(
-      (report) => report.categoryId === categoryId,
+      report => report.categoryId === categoryId,
     );
 
     if (categoryAlreadyHasReport) {
@@ -48,7 +48,7 @@ export default function Home({ categories }: IHomeProps) {
         <h2>Categories</h2>
 
         <CategoriesGrid>
-          {categories.map((category) => (
+          {categories.map(category => (
             <Category
               key={category.id}
               onClick={() => handleSelectCategory(category.id)}

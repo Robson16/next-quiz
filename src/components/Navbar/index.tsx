@@ -6,9 +6,5 @@ interface INavbarProps {
 }
 
 export function Navbar({ children }: INavbarProps) {
-  return (
-    <Container>
-      {children}
-    </Container>
-  );
+  return <Container>{children}</Container>;
 }

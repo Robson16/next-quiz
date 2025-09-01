@@ -7,6 +7,7 @@ Quiz App created with ReactJS and NextJS
 - [Production App](https://my-next-quiz.vercel.app/)
 
 ## 🛠 Technologies
+
 This project was developed with the following technologies
 
 - [Next.js](https://nextjs.org/)
@@ -35,7 +36,5 @@ $ npm dev
 # or
 $ yarn dev
 ```
+
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-
-
